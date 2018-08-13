@@ -18,7 +18,6 @@ app.use(cookieSession({
 }));
 
 app.set("view engine", "ejs");
-console.log(bcryptjs.hashSync('purple', 10)); 
 
 const urlDatabase = {
   "b2xVn2": {
@@ -55,17 +54,11 @@ const generateRandomString = () => {
 
 // This function expression checks if the currentUserid matches with the userid from the database
 const userExists = (currentUser) => {
-  console.log(`checking to see if ${currentUser} exists`);
   for (let user in users) {
-    console.log(`comparing ${currentUser} to ${user}`);
     if (user === currentUser) {
-      console.log(`yep`);
-      console.log();
       return true;
     }
   }
-  console.log(`nope`);
-  console.log();
   return false;
 };
 
@@ -81,12 +74,10 @@ const emailExists = (email, password) => {
 }
 
 app.get('/', (req, res) => {
-  console.log(`console test!!!!!`)
   res.redirect('/login');
 });
 
 app.get('/login', (req, res) => {
-  console.log(`another console test!!!!!`)
   if (userExists(req.session.user_id)) {
     res.render('urls_index', { username: users[req.session.user_id] });
   } else {
@@ -175,7 +166,6 @@ app.get('/register', (req, res) => {
 
 
 app.post('/urls/:id/delete', (req, res) => {
-  console.log(req.session.user_id);
   if (userExists(req.session.user_id)) {
     delete urlDatabase[req.params.id];
     res.redirect('/urls');
@@ -235,7 +225,6 @@ app.post('/login', (req, res) => {
 
 app.post('/register', (req, res) => {
   // check if email or password is empty
-  //console.log(req.body.email); === test
   if (req.body.email === '' || req.body.password === '') {
     res.status(400);
     res.send('Email or password empty.')
