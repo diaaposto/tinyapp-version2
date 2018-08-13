@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<head>
+  <title>Tiny App</title>
+</head>
+<h1 style="color: blue; font-size: 30px;"> Tiny App </h1>
+  <body>
+    <% if (username) { %>
+    <form method="POST" action="/logout">
+      <button type="submit">Logout</button> 
+    </form>
+    <% } else { %>
+      <form method="POST" action="/login">
+        Email: <input type="email" name="email">
+        Password: <input type="password" name="password">
+        <button type="submit">Login</button>
+      </form>  
+  </body>
+  <% } %>
+  </html>

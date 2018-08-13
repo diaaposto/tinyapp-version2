@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<head>
+  <title>Tiny App</title>
+</head>
+  <body>
+    <form action="/urls/<%= url  %>" method="POST">
+      <input id="newURL" name="newURL" value="<%= long %>">
+    </form>
+    <form action="/urls/<%= url %>/delete" method="POST">
+      <input type="submit" name="newURL" value="Delete">
+      <button type="submit">Update</button>
+    </form>
+    <a href="/urls"> Navigate back to the index</a>
+  </body>
+</html>

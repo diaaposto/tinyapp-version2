@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+  <head>
+  <title>Tiny App</title>
+  </head>
+  <body>
+  <header>
+    <% include ./partials/_headers %>
+  </header>
+    <p>
+      <ul>
+        <% for(let key in url) { %>
+          <% if (url[key].linkid === username.id) { %>
+            <li><%= key %> <%= url[key].url %></li>
+            
+            <form action="/urls/<%= key  %>" method="POST">
+              <input readonly id="newURL" type="text" name="newURL" value="<%= url[key].longURL %>"> : <a href = "<%= url[key].longURL %>"> Visit the site </a>
+            </form>
+            
+            <form action="/urls/<%= key %>/delete" method="POST">
+              <input type="submit" value="Delete">
+            </form>
+            
+            <form action="/urls/<%= key %>" method="GET">
+              <input type="submit" value="Edit">
+            </form>
+            
+            <% } %>
+            <% } %>
+          </ul>
+        </p>
+      <a href = "/urls/new"> Want to shorten a new URL? </a>
+  </body>
+  </html>
