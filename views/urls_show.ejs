@@ -3,12 +3,19 @@
   <title>Tiny App</title>
 </head>
   <body>
-    <form action="/urls/<%= url  %>" method="POST">
-      <input id="newURL" name="newURL" value="<%= long %>">
-    </form>
-    <form action="/urls/<%= url %>/delete" method="POST">
-      <input type="submit" name="newURL" value="Delete">
-      <button type="submit">Update</button>
+    <p>
+      Your short URL: <%= shortURL %>
+    </p>
+    <p>
+      The website of your URL: <%=longURL%>
+    </p>
+    <p>
+      Update your website URL here:
+    </p>
+
+    <form action="/urls/<%= shortURL %>" method="POST">
+      <input id="longURL" type="text" name="longURL" value="http://">
+      <input type="submit" value="Update">
     </form>
     <a href="/urls"> Navigate back to the index</a>
   </body>

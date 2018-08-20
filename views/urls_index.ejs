@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
   <head>
   <title>Tiny App</title>
   </head>
@@ -9,25 +10,21 @@
     <p>
       <ul>
         <% for(let key in url) { %>
-          <% if (url[key].linkid === username.id) { %>
-            <li><%= key %> <%= url[key].url %></li>
-            
-            <form action="/urls/<%= key  %>" method="POST">
-              <input readonly id="newURL" type="text" name="newURL" value="<%= url[key].longURL %>"> : <a href = "<%= url[key].longURL %>"> Visit the site </a>
-            </form>
-            
-            <form action="/urls/<%= key %>/delete" method="POST">
-              <input type="submit" value="Delete">
-            </form>
-            
-            <form action="/urls/<%= key %>" method="GET">
-              <input type="submit" value="Edit">
-            </form>
-            
-            <% } %>
-            <% } %>
-          </ul>
-        </p>
-      <a href = "/urls/new"> Want to shorten a new URL? </a>
+        <li><%= key %> <%= url[key].url %></li>
+
+        <form action="/urls/<%= key  %>" method="POST">
+          <input id="newURL" type="text" name="newURL" value="<%= url[key].longURL %>
+          <a href="<%= url[key].longURL %>"> Visit the site </a>
+        </form>
+
+        <form action="/urls/<%= key %>/delete" method="POST">
+          <input type="submit" value="Delete">
+          <a href="/urls/<%= key %>"> Edit </a>
+        </form>
+
+        <% } %>
+        <a href = "/urls/new"> Want to shorten a new URL? </a>
+      </ul>
+    </p>
   </body>
-  </html>
+</html>
