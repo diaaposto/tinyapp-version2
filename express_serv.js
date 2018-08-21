@@ -108,7 +108,6 @@ app.get('/login', (req, res) => {
 });
 
 //Once a user is registered and logged in they will be redirected to this page
-
 app.get('/urls', (req, res) => {
 const subsetUser = loggedInUser(req.session.user_id);
     let templateVars = {
@@ -147,6 +146,7 @@ app.get('/u/:id', (req, res) => {
   res.redirect(redirectedUser);
 });
 
+//Page to resgister the user
 app.get('/register', (req, res) => {
   if (userExists(req.session.user_id)) {
     res.redirect('/');
@@ -154,7 +154,7 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-
+//Post to delete a URL
 app.post('/urls/:id/delete', (req, res) => {
   if (userExists(req.session.user_id)) {
     delete urlDatabase[req.params.id];
@@ -257,6 +257,7 @@ app.post('/register', (req, res) => {
   }
 });
 
+//End-point to log-out
 app.post('/logout', (req, res) => {
   req.session.user_id = null;
   res.redirect('/');
