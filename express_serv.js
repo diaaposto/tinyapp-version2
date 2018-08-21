@@ -139,12 +139,12 @@ app.get('/urls/:id', (req, res) => {
 app.get('/u/:id', (req, res) => {
   let shortURL = req.params.id;
   let redirectedUser;
-  if ( !urlDatabase[req.params.shortURL].longURL.includes('http') ) {
-    redirect = 'http://' + urlDatabase[req.params.shortURL].longURL;
+  if ( !urlDatabase[shortURL].longURL.includes('http') ) {
+    redirectedUser = 'http://' + urlDatabase[shortURL].longURL;
     } else {
-      redirect = urlDatabase[req.params.shortURL].longURL;
+      redirectedUser = urlDatabase[shortURL].longURL;
     };
-  res.redirect(redirect);
+  res.redirect(redirectedUser);
 });
 
 app.get('/register', (req, res) => {
