@@ -4,12 +4,17 @@
   <title>Tiny App</title>
 </head>
   <body style="font-size:20px; padding:50px;">
-    <% include partials/_headers %>
+    <% include ./partials/_headers %>
 
+    <% if (!username) { %>
+    <a href="/login/">Navigate to the login page to shorten a new URL</a>
+
+    <% } else { %>
     <form action="/urls" method="POST" style="margin:150px;">
       <label for="longURL">Enter a URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
       <input type="submit" value="Submit">
     </form>
+    <% } %>
   </body>
 </html>

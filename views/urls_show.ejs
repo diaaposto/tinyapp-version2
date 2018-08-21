@@ -3,20 +3,25 @@
   <title>Tiny App</title>
 </head>
   <body>
+    <% include ./partials/_headers %>
+    <br>
+      Here's the shortened link of your URL: <%= shortURL %>
+    </br>
+    <br>
+      ...and here's the website of your shortened link: <%=longURL%>
+    </br>
     <p>
-      Your short URL: <%= shortURL %>
-    </p>
-    <p>
-      The website of your URL: <%=longURL%>
-    </p>
-    <p>
-      Update your website URL here:
+      Want to update the short link? Update it here:
     </p>
 
     <form action="/urls/<%= shortURL %>" method="POST">
       <input id="longURL" type="text" name="longURL" value="http://">
       <input type="submit" value="Update">
     </form>
+
+    <br>
     <a href="/urls"> Navigate back to the index</a>
+    </br>
+
   </body>
 </html>

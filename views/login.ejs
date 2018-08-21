@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Tiny App</title>
+  <title>Tiny App - Login</title>
 </head>
-
 <h1 style="color: blue; font-size: 30px;"> Tiny App </h1>
-
   <body>
-    <h2> Sign in with your credentials here</h2>
 
+    <% if (!username) { %>
     <form method="POST" action="/login">
-      <input type="email" name="email" placeholder="email">
+      <input type="email" name="email" placeholder="email address">
       <input type="password" name="password" placeholder="password">
-      <input type="submit" value="login">
+      <input type="submit" value="Login">
     </form>
 
-  </body>
+    <% } else { %>
 
+    <h3> You are already logged in </h3>
+    <% } %>
+  </body>
 </html>

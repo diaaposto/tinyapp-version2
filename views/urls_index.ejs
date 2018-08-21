@@ -4,9 +4,7 @@
   <title>Tiny App</title>
   </head>
   <body>
-  <header>
     <% include ./partials/_headers %>
-  </header>
     <p>
       <ul>
         <% for(let key in url) { %>
@@ -23,7 +21,9 @@
         </form>
 
         <% } %>
+        <br>
         <a href = "/urls/new"> Want to shorten a new URL? </a>
+      </br>
       </ul>
     </p>
   </body>

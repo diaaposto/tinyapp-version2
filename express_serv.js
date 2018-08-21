@@ -77,8 +77,7 @@ const emailExists = (email, password) => {
   }
 };
 
-//Function to help users store their web searches
-
+//Function that returns an object that stores the URLs of the logged in user
 const loggedInUser = (user) => {
   let subset = {};
   for (const shortURL in urlDatabase) {
@@ -101,12 +100,14 @@ app.get('/login', (req, res) => {
   }
 
   if (users[req.session.user_id]) {
-    res.redirect('/urls');
+    res.redirect('/urls', templateVars);
+
   } else {
   res.render('login', templateVars);
   }
 });
 
+//Once a user is registered and logged in they will be redirected to this page
 
 app.get('/urls', (req, res) => {
 const subsetUser = loggedInUser(req.session.user_id);
@@ -122,7 +123,6 @@ app.get('/urls/new', (req, res) => {
     let templateVars = {
       username: users[req.session.user_id]
     };
-
     res.render('urls_new', templateVars);
 });
 
@@ -135,18 +135,16 @@ app.get('/urls/:id', (req, res) => {
     res.render('urls_show', templateVars);
 });
 
-app.get('/u/:shortURL', (req, res) => {
-  if (!urlDatabase[req.params.shortURL]) {
-    res.status(404);
-    res.send('Error: 404');
-  }
-  res.redirect(urlDatabase[req.params.shortURL].longURL);
-});
-
-app.get("/u/:id", (req, res) => {
-  var shortURL = req.params.id;
-  var longURL = urlDatabase[shortURL].longURL;
-  res.redirect(longURL);
+//Page that will redirect the user to the long URL
+app.get('/u/:id', (req, res) => {
+  let shortURL = req.params.id;
+  let redirectedUser;
+  if ( !urlDatabase[req.params.shortURL].longURL.includes('http') ) {
+    redirect = 'http://' + urlDatabase[req.params.shortURL].longURL;
+    } else {
+      redirect = urlDatabase[req.params.shortURL].longURL;
+    };
+  res.redirect(redirect);
 });
 
 app.get('/register', (req, res) => {
@@ -156,14 +154,6 @@ app.get('/register', (req, res) => {
   res.render('register');
 });
 
-app.post("/urls:id/edit", (req, res) => {
-  if (userExists(req.session.user_id)) {
-    res.redirect("/urls/:id");
-  } else {
-    res.status(403);
-    res.send('Error');
-  }
-});
 
 app.post('/urls/:id/delete', (req, res) => {
   if (userExists(req.session.user_id)) {
@@ -176,65 +166,84 @@ app.post('/urls/:id/delete', (req, res) => {
 
 app.post('/urls', (req, res) => {
   if (userExists(req.session.user_id)) {
+
     let shortURL = generateRandomString();
+
     urlDatabase[shortURL] = {
       longURL: req.body.longURL,
       linkid: req.session.user_id
     };
     res.redirect(`/urls/${shortURL}`);
   } else {
-    res.status(401);
-    res.send('Error: 401: <a href="/"> login to gain full access to the website </a>');
+    res.status(401).send('Error 401: <a href="/"> login to gain full access to the website </a>');
   }
 });
 
 app.post('/urls/:id', (req, res) => {
-  if (!(urlDatabase[req.params.id])) {
+  let shortURL = req.params.id
+  let longURL = req.body.longURL
+  let cookieUser = req.session.user_id
+
+
+  if (!(urlDatabase[shortURL])) {
     res.status(404);
     res.send('Error: 404');
     return;
-  } if (!req.session.user_id) {
+
+  } if (!cookieUser) {
     res.status(401);
     res.send('Error: 401');
     return;
-  } if (urlDatabase[req.params.id].linkid !== req.session.user_id) {
+
+  } if (urlDatabase[shortURL].linkid !== cookieUser) {
     res.status(403)
     res.send('Error: 403');
     return;
-  } if (userExists(req.session.user_id)) {
+
+  } if (userExists(cookieUser)) {
     urlDatabase[req.params.id] = {
       longURL: req.body.longURL,
-      linkid: req.session.user_id
+      linkid: cookieUser
     };
+
     res.redirect('/urls/' + req.params.id);
+  } else {
+    res.send('Error: 403')
   }
 });
 
-
+//end-point to login
 
 app.post('/login', (req, res) => {
   // check if the e-mail and passwords match and user emails match
   // const verifiedId = '';
-  
-  for (let user in users) {
+
+  for (const user in users) {
     const verifiedPassword = bcryptjs.compareSync(req.body.password, users[user].password);
-    if (users[user].email === req.body.email && verifiedPassword) {
+    const bodyEmail = req.body.email;
+
+    if (users[user].email === bodyEmail && verifiedPassword) {
       req.session.user_id = users[user].id;
       res.redirect('/urls');
       return;
     }
-  } 
+  }
   res.status(400).send('username and password do not match');
 });
 
+// Endpoint to post /register
 app.post('/register', (req, res) => {
 
-  if (req.body.email === '' || req.body.password === '') {
-    res.status(400).send('Email or password empty.')
-//now we're checking all the users we have -- does any of them match req.body.email
+  if (!req.body.email) {
+    res.status(400).send('Please enter an e-mail address.')
+
+  } else if (!req.body.password) {
+    res.status(400).send('Please enter a password.')
+
+    //now we're checking all the users we have -- does any of them match req.body.email
   } else if (emailExists(req.body.email)) {
-    res.status(400);
-    res.send('Email is in use.');
+    res.status(400).send('E-mail address is already in use.');
+
   } else {
     // add a new user to dabatase
     let newUserId = generateRandomString();
