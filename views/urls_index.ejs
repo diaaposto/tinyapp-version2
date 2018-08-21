@@ -10,15 +10,17 @@
         <% for(let key in url) { %>
         <li><%= key %> <%= url[key].url %></li>
 
-        <div style="display: flex; align-items: center">
-          <p style="margin-right: 5px;"><%= url[key].longURL %></p>
-          <a href="<%= url[key].longURL %>"> Visit the site </a>
-        </div>
+        <!-- <div style="display: flex; align-items: center"> -->
+          <!-- <p style="margin-right: 5px;"></p> -->
+          <%= url[key].longURL %><a href="<%= url[key].longURL %>"> Visit the site </a>
+        <!-- </div> -->
 
         <form action="/urls/<%= key %>/delete" method="POST">
           <input type="submit" value="Delete">
           <a href="/urls/<%= key %>"> Edit </a>
+          <br></br>
         </form>
+        
 
         <% } %>
         <br>
