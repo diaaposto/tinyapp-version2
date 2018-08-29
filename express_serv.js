@@ -8,8 +8,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const bcryptjs = require('bcryptjs');
 const password = "purple";
 
-const hashedPassword = bcryptjs.hashSync(password, 10);
-
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
   name: 'session',
@@ -246,11 +244,12 @@ app.post('/register', (req, res) => {
 
   } else {
     // add a new user to dabatase
+    const hashedPassword = bcryptjs.hashSync(password, 10);
     let newUserId = generateRandomString();
     users[newUserId] = {
       id: newUserId,
       email: req.body.email,
-      password: req.body.password
+      password: hashedPassword
     };
     req.session.user_id = newUserId;
     res.redirect('/urls');
