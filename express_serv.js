@@ -5,8 +5,8 @@ const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const bcryptjs = require('bcryptjs');
-const password = "purple";
+const bcrypt = require('bcryptjs');
+// const password = "purple";
 
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
@@ -217,7 +217,7 @@ app.post('/login', (req, res) => {
   // const verifiedId = '';
 
   for (const user in users) {
-    const verifiedPassword = bcryptjs.compareSync(req.body.password, users[user].password);
+    const verifiedPassword = bcrypt.compareSync(req.body.password, users[user].password);
     const bodyEmail = req.body.email;
 
     if (users[user].email === bodyEmail && verifiedPassword) {
@@ -244,7 +244,8 @@ app.post('/register', (req, res) => {
 
   } else {
     // add a new user to dabatase
-    const hashedPassword = bcryptjs.hashSync(password, 10);
+    // const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(req.body.password, 10);
     let newUserId = generateRandomString();
     users[newUserId] = {
       id: newUserId,
